@@ -1,26 +1,78 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import marked from 'marked';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const renderer = new marked.Renderer();
+class App extends React.Component{
+  constructor(props){
+    super(props);
+    this.state={
+      markdown: '',
+      editorMaximized: false, //cua so editor se phong to khi co gia tri bang true
+      previewMaximized: false
+    }
+    this.handleChange=this.handleChange.bind(this);
+    this.handleEditorMaximize=this.handleEditorMaximize.bind(this);
+    this.handlePreviewMaximize=this.handlePreviewMaximize.bind(this);
+  }
+  handleChange(event){ //xu li su kien thay doi text trong editor
+    this.setState({
+      markdown: event.target.value
+    })
+  }
+  handleEditorMaximize(){
+    this.setState({
+      editorMaximized: !this.state.editorMaximized
+    })
+  }
+  handlePreviewMaximize(){
+    this.setState({
+      previewMaximized: !this.state.previewMaximized
+    })
+  }
+  
+  render(){
+    console.log(this.state.previewMaximized);
+    const classes = this.state.editorMaximized ? 
+          ['editorWrap maximized', 'previewWrap hide', 'fa fa-compress'] : 
+          this.state.previewMaximized ?
+          ['editorWrap hide', 'previewWrap maximized', 'fa fa-compress'] :
+          ['editorWrap', 'previewWrap', 'fa fa-arrows-alt'];
+    return(
+      <div>
+        <div className={classes[0]}>
+          <Toolbar icon={classes[2]} onClick={this.handleEditorMaximize}/>
+          <Editor markdown={this.state.markdown} onChange={this.handleChange} />
+        </div>
+        <div className={classes[1]}>
+          <Toolbar icon={classes[2]} onClick={this.handlePreviewMaximize}/>
+          <Preview markdown={this.state.markdown}/>
+        </div>
+      </div>
+    ) 
+  }
 }
 
+const Toolbar=(props)=>{
+  return (
+    <div className="toolbar">
+      <i title="no-stack-dub-sack" className="fa fa-free-code-camp"/>
+      {props.text}
+      <i onClick={props.onClick} className={props.icon}/>
+    </div>
+  )
+}
+
+const Editor=(props)=>{
+  return(
+    <textarea id="editor" type="text" value={props.markdown} onChange={props.onChange}></textarea>
+  )
+}
+
+const Preview=(props)=>{
+  return(
+    <div id="preview" dangerouslySetInnerHTML={{__html:marked(props.markdown, {renderer:renderer})}}>
+    </div>
+  )
+}
 export default App;
