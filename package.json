@@ -1,4 +1,5 @@
 {
+  "homepage": "hungnguyen7.github.io/markdown-previewer",
   "name": "markdown-previewer",
   "version": "0.1.0",
   "private": true,
@@ -7,6 +8,7 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "bootstrap-icons": "^1.0.0-alpha3",
+    "gh-pages": "^2.2.0",
     "marked": "^1.0.0",
     "react": "^16.13.1",
     "react-bootstrap-icons": "^1.0.2-alpha3",
@@ -14,6 +16,8 @@
     "react-scripts": "3.4.1"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
